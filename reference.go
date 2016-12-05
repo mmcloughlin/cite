@@ -11,16 +11,35 @@ const (
 	GithubHost   = "github.com"
 )
 
+// LineRange
 type LineRange struct {
-	Start int
-	End   int
+	start int
+	end   int
 }
 
-func (l LineRange) String() string {
-	if l.Start == l.End {
-		return fmt.Sprintf("L%d", l.Start)
+func NewSingleLine(n int) LineRange {
+	return NewLineRange(n, n)
+}
+
+func NewLineRange(s, e int) LineRange {
+	return LineRange{
+		start: s,
+		end:   e,
 	}
-	return fmt.Sprintf("L%d-L%d", l.Start, l.End)
+}
+
+func (l LineRange) Start() int { return l.start }
+func (l LineRange) End() int   { return l.end }
+
+func (l LineRange) String() string {
+	switch {
+	case l.start < l.end:
+		return fmt.Sprintf("L%d-L%d", l.start, l.end)
+	case l.start == l.end:
+		return fmt.Sprintf("L%d", l.start)
+	default:
+		return ""
+	}
 }
 
 // Reference represents a github reference such as:
@@ -34,11 +53,11 @@ type Reference struct {
 	Lines      LineRange
 }
 
-func (r Reference) URL() *url.URL {
+func (r Reference) url(what string) *url.URL {
 	path := path.Join(
 		r.User,
 		r.Repository,
-		"blob",
+		what,
 		r.GitRef,
 		r.Path,
 	)
@@ -50,6 +69,12 @@ func (r Reference) URL() *url.URL {
 	}
 }
 
-func (r Reference) String() string {
-	return r.URL().String()
+func (r Reference) BlobURL() *url.URL {
+	return r.url("blob")
+}
+
+func (r Reference) RawFileURL() *url.URL {
+	u := r.url("raw")
+	u.Fragment = ""
+	return u
 }
