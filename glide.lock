@@ -1,8 +1,19 @@
-hash: d466b05e958b7152c3fcbdf7967320c6a3073f02f26f59f038c30f9ca11a8741
-updated: 2016-12-04T17:06:27.424555455-08:00
+hash: 3cb18d2ca3b433563114fed5a0987b913c080acbed78bdde9650493c30de1a5d
+updated: 2016-12-04T17:59:55.757831921-08:00
 imports:
+- name: github.com/jarcoal/httpmock
+  version: 145b10d659265440f062c31ea15326166bae56ee
 - name: github.com/stretchr/testify
   version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:
   - assert
-testImports: []
+  - require
+testImports:
+- name: github.com/davecgh/go-spew
+  version: 6d212800a42e8ab5c146b8ace3490ee17e5225f9
+  subpackages:
+  - spew
+- name: github.com/pmezard/go-difflib
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  subpackages:
+  - difflib
