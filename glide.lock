@@ -1,8 +1,10 @@
-hash: 3cb18d2ca3b433563114fed5a0987b913c080acbed78bdde9650493c30de1a5d
-updated: 2016-12-04T17:59:55.757831921-08:00
+hash: 849c3ce3c1f0fcf0491b4402674d766540954a0459e5a5372df3986168213f07
+updated: 2016-12-05T22:01:27.257011011-08:00
 imports:
 - name: github.com/jarcoal/httpmock
   version: 145b10d659265440f062c31ea15326166bae56ee
+- name: github.com/mvdan/xurls
+  version: de85a6f607af2e645cce05905efd9420e43b91f1
 - name: github.com/stretchr/testify
   version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:

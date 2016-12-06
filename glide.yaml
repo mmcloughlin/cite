@@ -5,3 +5,5 @@ import:
   subpackages:
   - assert
 - package: github.com/jarcoal/httpmock
+- package: github.com/mvdan/xurls
+  version: ^1.0.0
