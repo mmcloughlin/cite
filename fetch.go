@@ -9,9 +9,8 @@ import (
 
 var ErrFetchNonStatusOK = errors.New("cite: non-200 HTTP response")
 
-func Fetch(ref Reference) (string, error) {
-	u := ref.RawFileURL()
-	res, err := http.Get(u.String())
+func Fetch(r Resource) (string, error) {
+	res, err := http.Get(r.URL().String())
 	if err != nil {
 		return "", err
 	}
@@ -21,23 +20,18 @@ func Fetch(ref Reference) (string, error) {
 		return "", ErrFetchNonStatusOK
 	}
 
-	return ReadLineRange(res.Body, ref.Lines)
+	return ReadLineSelection(res.Body, r.Lines())
 }
 
-type IntRange interface {
-	Start() int
-	End() int
-}
-
-func ReadLineRange(r io.Reader, lines IntRange) (string, error) {
+func ReadLineSelection(r io.Reader, lines LineSelection) (string, error) {
 	scanner := bufio.NewScanner(r)
 	output := ""
-	i := 1
-	for scanner.Scan() && i <= lines.End() {
-		if i >= lines.Start() {
+	n := 1
+	for scanner.Scan() {
+		if lines.LineIncluded(n) {
 			output += scanner.Text() + "\n"
 		}
-		i++
+		n++
 	}
 	return output, scanner.Err()
 }
