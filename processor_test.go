@@ -12,8 +12,8 @@ func TestParseDirective(t *testing.T) {
 	dir, err := ParseDirective(line)
 	require.NoError(t, err)
 	assert.Equal(t, "insert", dir.ActionRaw)
-	assert.Equal(t, "https://www.rfc-editor.org/rfc/rfc918.txt", dir.URL.String())
-	assert.Equal(t, "13-16", dir.Extra)
+	assert.Equal(t, "https://www.rfc-editor.org/rfc/rfc918.txt", dir.Citation.URL.String())
+	assert.Equal(t, "13-16", dir.Citation.Extra)
 }
 
 func TestParseDirectiveNoExtra(t *testing.T) {
@@ -21,8 +21,8 @@ func TestParseDirectiveNoExtra(t *testing.T) {
 	dir, err := ParseDirective(line)
 	require.NoError(t, err)
 	assert.Equal(t, "Action", dir.ActionRaw)
-	assert.Equal(t, "http://google.org", dir.URL.String())
-	assert.Equal(t, "", dir.Extra)
+	assert.Equal(t, "http://google.org", dir.Citation.URL.String())
+	assert.Equal(t, "", dir.Citation.Extra)
 }
 
 func TestParseDirectiveGarbage(t *testing.T) {
@@ -30,4 +30,11 @@ func TestParseDirectiveGarbage(t *testing.T) {
 	dir, err := ParseDirective(line)
 	assert.Nil(t, dir)
 	assert.NoError(t, err)
+}
+
+func TestDirectiveAction(t *testing.T) {
+	dir := Directive{
+		ActionRaw: "MiXeDCAsE",
+	}
+	assert.Equal(t, "mixedcase", dir.Action())
 }

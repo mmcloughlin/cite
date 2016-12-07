@@ -1,6 +1,7 @@
 package cite
 
 import (
+	"fmt"
 	"net/url"
 	"regexp"
 	"strings"
@@ -21,14 +22,21 @@ func init() {
 	}
 }
 
-func CanonicalAction(s string) string {
-	return strings.ToLower(s)
+type Citation struct {
+	URL   *url.URL
+	Extra string
+}
+
+func (c Citation) String() string {
+	if c.Extra == "" {
+		return c.URL.String()
+	}
+	return fmt.Sprintf("%v (%s)", c.URL, c.Extra)
 }
 
 type Directive struct {
 	ActionRaw string
-	URL       *url.URL
-	Extra     string
+	Citation  Citation
 }
 
 func ParseDirective(line string) (*Directive, error) {
@@ -48,13 +56,23 @@ func ParseDirective(line string) (*Directive, error) {
 
 	return &Directive{
 		ActionRaw: action,
-		URL:       u,
-		Extra:     extra,
+		Citation: Citation{
+			URL:   u,
+			Extra: extra,
+		},
 	}, nil
+}
+
+func CanonicalAction(s string) string {
+	return strings.ToLower(s)
 }
 
 func (d Directive) Action() string {
 	return CanonicalAction(d.ActionRaw)
+}
+
+func (d Directive) String() string {
+	return fmt.Sprintf("%s: %v", d.ActionRaw, d.Citation)
 }
 
 //type Handler interface {
