@@ -26,7 +26,7 @@ func TestFetch(t *testing.T) {
 	u, err := url.Parse("http://idk.com/doc.txt")
 	require.NoError(t, err)
 
-	lines, err := NewLineRange(23, 40)
+	lines, err := NewLineRange(3, 5)
 	require.NoError(t, err)
 
 	r := &MockResource{}
@@ -36,13 +36,13 @@ func TestFetch(t *testing.T) {
 	httpmock.RegisterResponder(
 		http.MethodGet,
 		u.String(),
-		httpmock.NewStringResponder(200, LineNumbersString(1, 100)),
+		httpmock.NewStringResponder(200, LineNumbersString(1, 10)),
 	)
 
 	s, err := Fetch(r)
 
 	require.NoError(t, err)
-	assert.Equal(t, LineNumbersString(23, 40), s)
+	assert.Equal(t, []string{"3", "4", "5"}, s)
 }
 
 // XXX http errors

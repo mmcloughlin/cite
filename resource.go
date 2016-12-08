@@ -21,6 +21,8 @@ type Resource interface {
 
 //go:generate mockery -name=Resource -inpkg -testonly -case=underscore
 
+type ResourceBuilder func(Citation) (Resource, error)
+
 // LineRange
 type LineRange struct {
 	start int
