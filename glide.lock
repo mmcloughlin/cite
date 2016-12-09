@@ -1,10 +1,16 @@
-hash: 509986d61c0a0b190b22589975a41590f11e9364bc94ba78f8f1adc7ffeddb34
-updated: 2016-12-07T09:44:27.183936202-08:00
+hash: ad0e95f30a576d52299d500f09932259af5383812cf9af06310c68bd30e5172e
+updated: 2016-12-08T22:46:35.786993875-08:00
 imports:
+- name: github.com/inconshreveable/mousetrap
+  version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/jarcoal/httpmock
   version: 145b10d659265440f062c31ea15326166bae56ee
 - name: github.com/mvdan/xurls
   version: de85a6f607af2e645cce05905efd9420e43b91f1
+- name: github.com/spf13/cobra
+  version: 9c28e4bbd74e5c3ed7aacbc552b2cab7cfdfe744
+- name: github.com/spf13/pflag
+  version: c7e63cf4530bcd3ba943729cee0efeff2ebea63f
 - name: github.com/stretchr/testify
   version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:

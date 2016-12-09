@@ -13,3 +13,4 @@ import:
   version: c060f04f93f57c44284360be78bb323077183645
   subpackages:
   - go/loader
+- package: github.com/spf13/cobra
