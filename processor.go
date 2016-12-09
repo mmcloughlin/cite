@@ -85,12 +85,57 @@ type Processor struct {
 	ResourceBuilders []ResourceBuilder
 }
 
-func (p Processor) Process(comment []string) ([]string, error) {
-	lines := comment
+func NewProcessor(builders []ResourceBuilder) Processor {
+	return Processor{
+		Handlers:         make(map[string]Handler),
+		ResourceBuilders: builders,
+	}
+}
+
+func (p Processor) AddHandler(action string, handler Handler) {
+	p.Handlers[CanonicalAction(action)] = handler
+}
+
+func (p Processor) Process(src Source) (Source, error) {
+	blocks := make([]CodeBlock, len(src.Blocks))
+	for i, block := range src.Blocks {
+		var err error
+		blocks[i], err = p.ProcessCodeBlock(block)
+		if err != nil {
+			return Source{}, nil
+		}
+	}
+	return Source{
+		Blocks: blocks,
+	}, nil
+}
+
+func (p Processor) ProcessCodeBlock(block CodeBlock) (CodeBlock, error) {
+	comment, err := p.ProcessCommentBlock(block.CommentBlock)
+	if err != nil {
+		return CodeBlock{}, err
+	}
+	return CodeBlock{
+		CommentBlock: comment,
+		Code:         block.Code,
+	}, nil
+}
+
+func (p Processor) ProcessCommentBlock(comment CommentBlock) (CommentBlock, error) {
+	var err error
+	comment.Lines, err = p.ProcessLines(comment.Lines)
+	if err != nil {
+		return CommentBlock{}, err
+	}
+	return comment, nil
+}
+
+func (p Processor) ProcessLines(lines []string) ([]string, error) {
 	var output []string
 
 	for len(lines) > 0 {
 		line := lines[0]
+		fmt.Println("processing:", line)
 
 		dir, err := ParseDirective(line)
 		if err != nil {
@@ -99,13 +144,19 @@ func (p Processor) Process(comment []string) ([]string, error) {
 
 		if dir == nil {
 			output = append(output, line)
+			lines = lines[1:]
 			continue
 		}
 
+		fmt.Println("directive:", dir)
+
 		r, err := p.getResource(dir.Citation)
 		if err != nil {
+			fmt.Println(err)
 			return nil, err
 		}
+
+		fmt.Println("resource:", r)
 
 		handler, ok := p.Handlers[dir.Action()]
 		if !ok {

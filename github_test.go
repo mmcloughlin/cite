@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGithubResourceCite(t *testing.T) {
@@ -33,3 +34,22 @@ func TestGithubResourceCite(t *testing.T) {
 //	expect := "https://github.com/a/b/raw/master/path/to/file"
 //	assert.Equal(t, expect, ref.RawFileURL().String())
 //}
+
+func TestParseLineRangeFragmentGarbage(t *testing.T) {
+	_, err := parseLineRangeFragment("idk!?")
+	assert.Error(t, err)
+}
+
+func TestParseLineRangeFragmentSingle(t *testing.T) {
+	lines, err := parseLineRangeFragment("L42")
+	assert.NoError(t, err)
+	assert.Equal(t, NewSingleLine(42), lines)
+}
+
+func TestParseLineRangeFragmentRange(t *testing.T) {
+	lines, err := parseLineRangeFragment("L3-L5")
+	assert.NoError(t, err)
+	expect, err := NewLineRange(3, 5)
+	require.NoError(t, err)
+	assert.Equal(t, expect, lines)
+}
