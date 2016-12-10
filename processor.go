@@ -135,7 +135,6 @@ func (p Processor) ProcessLines(lines []string) ([]string, error) {
 
 	for len(lines) > 0 {
 		line := lines[0]
-		fmt.Println("processing:", line)
 
 		dir, err := ParseDirective(line)
 		if err != nil {
@@ -148,15 +147,10 @@ func (p Processor) ProcessLines(lines []string) ([]string, error) {
 			continue
 		}
 
-		fmt.Println("directive:", dir)
-
 		r, err := p.getResource(dir.Citation)
 		if err != nil {
-			fmt.Println(err)
 			return nil, err
 		}
-
-		fmt.Println("resource:", r)
 
 		handler, ok := p.Handlers[dir.Action()]
 		if !ok {
