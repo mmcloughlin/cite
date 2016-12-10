@@ -48,6 +48,7 @@ func processFile(filename string) error {
 
 	builders := []cite.ResourceBuilder{
 		cite.BuildGithubResourceFromCitation,
+		cite.BuildPlainResourceFromCitation,
 	}
 	processor := cite.NewProcessor(builders)
 	processor.AddHandler("insert", cite.InsertHandler)
