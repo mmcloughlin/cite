@@ -52,6 +52,7 @@ func processFile(filename string) error {
 	}
 	processor := cite.NewProcessor(builders)
 	processor.AddHandler("insert", cite.InsertHandler)
+	processor.AddHandler("reference", cite.SkipReferenceHandler)
 
 	processed, err := processor.Process(src)
 	if err != nil {

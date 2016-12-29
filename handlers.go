@@ -25,3 +25,9 @@ func InsertHandler(r Resource, lines []string) ([]string, []string, error) {
 
 	return insertion, lines[1:], nil
 }
+
+func SkipReferenceHandler(r Resource, lines []string) ([]string, []string, error) {
+	snippetLength := r.Lines().NumLines()
+	referenceLength := snippetLength + 3
+	return lines[:referenceLength], lines[referenceLength:], nil
+}
