@@ -26,3 +26,6 @@ func TestParseCodeRoundTrip(t *testing.T) {
 		AssertParseCodeRoundTrip(t, gofile)
 	}
 }
+
+// TODO file starting with comment
+// TODO file ending with comment
