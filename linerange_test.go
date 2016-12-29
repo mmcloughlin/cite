@@ -34,6 +34,14 @@ func TestParseLineRangeErrors(t *testing.T) {
 	}
 }
 
+func TestLineRangeGetters(t *testing.T) {
+	lr, err := NewLineRange(7, 13)
+	require.NoError(t, err)
+	assert.Equal(t, 7, lr.Start())
+	assert.Equal(t, 13, lr.End())
+	assert.Equal(t, 7, lr.NumLines())
+}
+
 func TestLineRangeString(t *testing.T) {
 	lr, _ := NewLineRange(7, 13)
 	assert.Equal(t, "7-13", lr.String())
@@ -42,4 +50,14 @@ func TestLineRangeString(t *testing.T) {
 func TestLineRangeStringSingle(t *testing.T) {
 	lr := NewSingleLine(7)
 	assert.Equal(t, "7", lr.String())
+}
+
+func TestLineRangeInclusion(t *testing.T) {
+	lr, err := NewLineRange(7, 13)
+	require.NoError(t, err)
+	assert.False(t, lr.LineIncluded(6))
+	assert.True(t, lr.LineIncluded(7))
+	assert.True(t, lr.LineIncluded(10))
+	assert.True(t, lr.LineIncluded(13))
+	assert.False(t, lr.LineIncluded(14))
 }

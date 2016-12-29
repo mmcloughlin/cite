@@ -23,15 +23,15 @@ func (_m *MockResource) Cite() Citation {
 }
 
 // Lines provides a mock function with given fields:
-func (_m *MockResource) Lines() LinePredicate {
+func (_m *MockResource) Lines() LineSelection {
 	ret := _m.Called()
 
-	var r0 LinePredicate
-	if rf, ok := ret.Get(0).(func() LinePredicate); ok {
+	var r0 LineSelection
+	if rf, ok := ret.Get(0).(func() LineSelection); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(LinePredicate)
+			r0 = ret.Get(0).(LineSelection)
 		}
 	}
 

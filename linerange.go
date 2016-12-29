@@ -69,3 +69,7 @@ func (l LineRange) End() int   { return l.end }
 func (l LineRange) LineIncluded(n int) bool {
 	return l.start <= n && n <= l.end
 }
+
+func (l LineRange) NumLines() int {
+	return l.end - l.start + 1
+}
