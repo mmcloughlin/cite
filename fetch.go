@@ -23,7 +23,7 @@ func Fetch(r Resource) ([]string, error) {
 	return ReadLineSelection(res.Body, r.Lines())
 }
 
-func ReadLineSelection(r io.Reader, lines LineSelection) ([]string, error) {
+func ReadLineSelection(r io.Reader, lines LinePredicate) ([]string, error) {
 	scanner := bufio.NewScanner(r)
 	var output []string
 	n := 1

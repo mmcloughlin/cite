@@ -134,6 +134,6 @@ func (r GithubResource) Cite() Citation {
 	}
 }
 
-func (r GithubResource) Lines() LineSelection {
+func (r GithubResource) Lines() LinePredicate {
 	return r.LineRange
 }

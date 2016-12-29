@@ -29,6 +29,6 @@ func (p PlainResource) Cite() Citation {
 	}
 }
 
-func (p PlainResource) Lines() LineSelection {
+func (p PlainResource) Lines() LinePredicate {
 	return p.LineRange
 }

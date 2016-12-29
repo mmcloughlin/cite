@@ -2,16 +2,16 @@ package cite
 
 import "net/url"
 
-type LineSelection interface {
+type LinePredicate interface {
 	LineIncluded(int) bool
 }
 
-//go:generate mockery -name=LineSelection -inpkg -testonly -case=underscore
+//go:generate mockery -name=LinePredicate -inpkg -testonly -case=underscore
 
 type Resource interface {
 	URL() *url.URL
 	Cite() Citation
-	Lines() LineSelection
+	Lines() LinePredicate
 }
 
 //go:generate mockery -name=Resource -inpkg -testonly -case=underscore
