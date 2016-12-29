@@ -54,6 +54,9 @@ func processFile(filename string) error {
 	processor.AddHandler("insert", cite.InsertHandler)
 
 	processed, err := processor.Process(src)
+	if err != nil {
+		return err
+	}
 
 	data := []byte(processed.String())
 	return ioutil.WriteFile(filename, data, 0)

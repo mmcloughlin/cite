@@ -11,6 +11,7 @@ import (
 )
 
 var ErrUnknownAction = errors.New("cite: unknown action")
+var ErrUnknownResource = errors.New("cite: unknown resource type")
 
 var directiveRegex *regexp.Regexp
 var subexpIdx = map[string]int{}
@@ -102,7 +103,7 @@ func (p Processor) Process(src Source) (Source, error) {
 		var err error
 		blocks[i], err = p.ProcessCodeBlock(block)
 		if err != nil {
-			return Source{}, nil
+			return Source{}, err
 		}
 	}
 	return Source{
@@ -150,6 +151,10 @@ func (p Processor) ProcessLines(lines []string) ([]string, error) {
 		r, err := p.getResource(dir.Citation)
 		if err != nil {
 			return nil, err
+		}
+
+		if r == nil {
+			return nil, ErrUnknownResource
 		}
 
 		handler, ok := p.Handlers[dir.Action()]
