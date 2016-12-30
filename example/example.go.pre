@@ -1,0 +1,10 @@
+package example
+
+import "fmt"
+
+// Greet says hello to who.
+//
+// Insert: https://github.com/mmcloughlin/cite/blob/master/example/grinch.txt#L6-L8
+func Greet(who string) {
+	fmt.Printf("Hello, %s!\n", who)
+}
