@@ -7,6 +7,12 @@ Cite snippets in your godoc
 [![Build status](https://img.shields.io/travis/mmcloughlin/cite.svg?style=flat-square)](https://travis-ci.org/mmcloughlin/cite)
 [![Coverage](https://img.shields.io/coveralls/mmcloughlin/cite.svg?style=flat-square)](https://coveralls.io/r/mmcloughlin/cite)
 
+## Install
+
+```
+go install github.com/mmcloughlin/cite/cmd/cite
+```
+
 ## Usage
 
 To reference something, add an insert line into your `godoc`. 
@@ -27,7 +33,7 @@ func Greet(who string) {
 
 Then run
 
-```bash
+```
 $ cite process example.go
 ```
 
