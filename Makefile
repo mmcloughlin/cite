@@ -5,3 +5,6 @@ LDFLAGS="-X ${CMD}/cmd.gitSHA=${GITSHA}"
 
 install:
 	go install -ldflags ${LDFLAGS} ${CMD}
+
+%: %.m4
+	m4 $< > $@

@@ -1,4 +1,4 @@
-
+changequote(`<', `>')
 
 # cite
 Cite snippets in your godoc
@@ -12,17 +12,7 @@ Cite snippets in your godoc
 To reference something, add an insert line into your `godoc`. 
 
 ```go
-package example
-
-import "fmt"
-
-// Greet says hello to who.
-//
-// Insert: https://github.com/mmcloughlin/cite/blob/master/example/grinch.txt#L6-L8
-func Greet(who string) {
-	fmt.Printf("Hello, %s!\n", who)
-}
-
+include(example/example.go.pre)
 ```
 
 Then run
@@ -34,22 +24,7 @@ $ cite process example.go
 It will fetch the reference and insert it into your code.
 
 ```go
-package example
-
-import "fmt"
-
-// Greet says hello to who.
-//
-// Reference: https://github.com/mmcloughlin/cite/blob/master/example/grinch.txt#L6-L8
-//
-//	Every Who Down in Whoville Liked Christmas a lot...
-//	But the Grinch,Who lived just north of Whoville, Did NOT!
-//	The Grinch hated Christmas! The whole Christmas season!
-//
-func Greet(who string) {
-	fmt.Printf("Hello, %s!\n", who)
-}
-
+include(example/example.go)
 ```
 
 It should [look nice in your godoc](https://godoc.org/github.com/mmcloughlin/cite/example).
