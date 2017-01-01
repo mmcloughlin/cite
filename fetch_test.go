@@ -43,7 +43,31 @@ func TestFetch(t *testing.T) {
 
 	require.NoError(t, err)
 	assert.Equal(t, []string{"3", "4", "5"}, s)
+	r.AssertExpectations(t)
 }
 
-// XXX http errors
-// XXX odd line number cases
+func TestFetchHTTPErrors(t *testing.T) {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	statusCodes := []int{301, 404, 500}
+
+	u, err := url.Parse("http://idk.com/doc.txt")
+	require.NoError(t, err)
+
+	r := &MockResource{}
+	r.On("URL").Return(u).Times(len(statusCodes))
+
+	for _, statusCode := range statusCodes {
+		httpmock.RegisterResponder(
+			http.MethodGet,
+			u.String(),
+			httpmock.NewStringResponder(statusCode, ""),
+		)
+
+		_, err = Fetch(r)
+		assert.Error(t, err)
+	}
+
+	r.AssertExpectations(t)
+}
