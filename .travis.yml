@@ -10,6 +10,6 @@ before_install:
   - go get github.com/mattn/goveralls
 script:
   - $GOPATH/bin/glide install
-  - overalls -project=github.com/mmcloughlin/cite
+  - overalls -project=github.com/mmcloughlin/cite -- -v
 after_success:
   - goveralls -coverprofile=overalls.coverprofile -service=travis-ci
