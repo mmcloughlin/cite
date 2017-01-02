@@ -26,18 +26,6 @@ func init() {
 	}
 }
 
-type Citation struct {
-	URL   *url.URL
-	Extra string
-}
-
-func (c Citation) String() string {
-	if c.Extra == "" {
-		return c.URL.String()
-	}
-	return fmt.Sprintf("%v (%s)", c.URL, c.Extra)
-}
-
 type Directive struct {
 	ActionRaw string
 	Citation  Citation

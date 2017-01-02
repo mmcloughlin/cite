@@ -1,6 +1,21 @@
 package cite
 
-import "net/url"
+import (
+	"fmt"
+	"net/url"
+)
+
+type Citation struct {
+	URL   *url.URL
+	Extra string
+}
+
+func (c Citation) String() string {
+	if c.Extra == "" {
+		return c.URL.String()
+	}
+	return fmt.Sprintf("%v (%s)", c.URL, c.Extra)
+}
 
 type LinePredicate interface {
 	LineIncluded(int) bool
