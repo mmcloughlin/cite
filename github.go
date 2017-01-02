@@ -70,8 +70,6 @@ type GithubResource struct {
 func BuildGithubResourceFromCitation(c Citation) (Resource, error) {
 	u := c.URL
 
-	fmt.Println(u.String())
-
 	if u.Host != GithubHost {
 		return nil, nil
 	}
@@ -124,7 +122,9 @@ func (r GithubResource) url(what string) *url.URL {
 }
 
 func (r GithubResource) URL() *url.URL {
-	return r.url("raw")
+	u := r.url("raw")
+	u.Fragment = ""
+	return u
 }
 
 func (r GithubResource) Cite() Citation {
