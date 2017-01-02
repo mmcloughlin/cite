@@ -13,6 +13,8 @@ type LineSelection interface {
 	NumLines() int
 }
 
+//go:generate mockery -name=LineSelection -inpkg -testonly -case=underscore
+
 type Resource interface {
 	URL() *url.URL
 	Cite() Citation
