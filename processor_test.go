@@ -32,6 +32,16 @@ func TestParseDirectiveGarbage(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+// TestParseDirectiveBadURL tests the case where the URL regular expression
+// matches but the extracted URL does not parse. This should be a rare case,
+// but it is possible to find examples ("http%") being the most compact.
+func TestParseDirectiveBadURL(t *testing.T) {
+	line := "Action: http%"
+	dir, err := ParseDirective(line)
+	assert.Error(t, err)
+	assert.Nil(t, dir)
+}
+
 func TestDirectiveAction(t *testing.T) {
 	dir := Directive{
 		ActionRaw: "MiXeDCAsE",
