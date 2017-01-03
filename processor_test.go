@@ -1,6 +1,7 @@
 package cite
 
 import (
+	"bytes"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -48,3 +49,55 @@ func TestDirectiveAction(t *testing.T) {
 	}
 	assert.Equal(t, "mixedcase", dir.Action())
 }
+
+func BuildSingleCommentSource(line string) Source {
+	comment := "// " + line
+	code := bytes.NewReader([]byte(comment))
+	return ParseCode(code)
+}
+
+func TestProcessLinesParseDirectiveError(t *testing.T) {
+	p := NewProcessor(nil)
+	src := BuildSingleCommentSource("Action: http%")
+	_, err := p.Process(src)
+	assert.Error(t, err)
+}
+
+func TestProcessLinesUnknownResource(t *testing.T) {
+	p := NewProcessor(nil)
+	src := BuildSingleCommentSource("Action: http://unknown.com")
+	_, err := p.Process(src)
+	assert.Equal(t, ErrUnknownResource, err)
+}
+
+func TestProcessLinesBadResource(t *testing.T) {
+	builders := []ResourceBuilder{BuildGithubResourceFromCitation}
+	p := NewProcessor(builders)
+	src := BuildSingleCommentSource("Action: http://github.com/bad/path")
+	_, err := p.Process(src)
+	assert.Error(t, err)
+}
+
+func TestProcessLinesErrUnknownAction(t *testing.T) {
+	builders := []ResourceBuilder{BuildPlainResourceFromCitation}
+	p := NewProcessor(builders)
+	src := BuildSingleCommentSource("Action: http://website.com/doc.txt (1-2)")
+	_, err := p.Process(src)
+	assert.Equal(t, ErrUnknownAction, err)
+}
+
+func TestProcessLinesHandlerError(t *testing.T) {
+	builders := []ResourceBuilder{BuildPlainResourceFromCitation}
+	p := NewProcessor(builders)
+	p.AddHandler("action", func(_ Resource, _ []string) ([]string, []string, error) {
+		return nil, nil, assert.AnError
+	})
+	src := BuildSingleCommentSource("Action: http://website.com/doc.txt (1-2)")
+	_, err := p.Process(src)
+	assert.Equal(t, assert.AnError, err)
+}
+
+// TODO error getting resource (eg bad github ref)
+// TODO didnt find any resource
+// TODO no handler for action
+// TODO error in handler
