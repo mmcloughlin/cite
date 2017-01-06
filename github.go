@@ -10,11 +10,13 @@ import (
 	"strings"
 )
 
+// Github URL parameters.
 const (
 	GithubScheme = "https"
 	GithubHost   = "github.com"
 )
 
+// Types of errors from parsing a github citation.
 var (
 	ErrGithubMalformedFragment = errors.New("cite: malformed github line range fragment")
 	ErrGithubWrongScheme       = errors.New("cite: incorrect scheme for github url")
@@ -56,7 +58,7 @@ func parseLineRangeFragment(fragment string) (LineRange, error) {
 	return NewLineRange(start, end)
 }
 
-// Reference represents a github reference such as:
+// GithubResource represents a snippet on github such as:
 //
 //	https://github.com/mmcloughlin/geohash/blob/master/LICENSE#L3-L10
 type GithubResource struct {
@@ -67,6 +69,8 @@ type GithubResource struct {
 	LineRange  LineRange
 }
 
+// BuildGithubResourceFromCitation constructs a GithubResource from a
+// reference to it.
 func BuildGithubResourceFromCitation(c Citation) (Resource, error) {
 	u := c.URL
 
@@ -121,12 +125,14 @@ func (r GithubResource) url(what string) *url.URL {
 	}
 }
 
+// URL returns the URL of the full (raw) file.
 func (r GithubResource) URL() *url.URL {
 	u := r.url("raw")
 	u.Fragment = ""
 	return u
 }
 
+// Cite returns a reference to the resource.
 func (r GithubResource) Cite() Citation {
 	return Citation{
 		URL:   r.url("blob"),
@@ -134,6 +140,7 @@ func (r GithubResource) Cite() Citation {
 	}
 }
 
+// Lines returns the selection of lines in the snippet.
 func (r GithubResource) Lines() LineSelection {
 	return r.LineRange
 }
