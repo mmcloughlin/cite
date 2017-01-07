@@ -17,6 +17,18 @@ func TestFormatSnippet(t *testing.T) {
 	assert.Equal(t, expect, FormatSnippet(lines))
 }
 
+func ExampleFormatSnippet() {
+	snippet := FormatSnippet([]string{"Hello,", "World!"})
+	for _, line := range snippet {
+		fmt.Printf(">%s\n", line)
+	}
+	// Output:
+	// >
+	// >	Hello,
+	// >	World!
+	// >
+}
+
 func GenerateResource(t *testing.T) {
 }
 
