@@ -2,6 +2,7 @@ package cite
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"testing"
@@ -27,5 +28,16 @@ func TestParseCodeRoundTrip(t *testing.T) {
 	}
 }
 
-// TODO file starting with comment
-// TODO file ending with comment
+func ExampleCommentBlock_String() {
+	c := CommentBlock{
+		Leader: "/*leader*/ ",
+		Lines: []string{
+			"Hello,",
+			"World!",
+		},
+	}
+	fmt.Printf("%s", c)
+	// Output:
+	// /*leader*/ //Hello,
+	// /*leader*/ //World!
+}

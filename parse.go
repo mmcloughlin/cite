@@ -7,14 +7,20 @@ import (
 	"regexp"
 )
 
-var commentExpr = `^(\s*)//(.*)$`
-var commentRegexp = regexp.MustCompile(commentExpr)
+var (
+	commentExpr   = `^(\s*)//(.*)$`
+	commentRegexp = regexp.MustCompile(commentExpr)
+)
 
+// CommentBlock represents a Golang block comment with "//" syntax. All lines
+// of the comment have the same bytes preceeding the "//", which we call the
+// leader.
 type CommentBlock struct {
 	Leader string
 	Lines  []string
 }
 
+// String converts the CommentBlock into source code.
 func (c CommentBlock) String() string {
 	out := ""
 	for _, line := range c.Lines {
@@ -23,11 +29,14 @@ func (c CommentBlock) String() string {
 	return out
 }
 
+// CodeBlock represents arbitrary lines of Golang source code preceeded by a
+// CommentBlock.
 type CodeBlock struct {
 	CommentBlock CommentBlock
 	Code         []string
 }
 
+// String converts the CodeBlock into source code.
 func (b CodeBlock) String() string {
 	out := b.CommentBlock.String()
 	for _, line := range b.Code {
@@ -36,10 +45,13 @@ func (b CodeBlock) String() string {
 	return out
 }
 
+// Source represents a Golang source file broken up into CodeBlock objects, by
+// splitting on comment blocks.
 type Source struct {
 	Blocks []CodeBlock
 }
 
+// String converts Source into source code.
 func (s Source) String() string {
 	out := ""
 	for _, b := range s.Blocks {
@@ -48,6 +60,8 @@ func (s Source) String() string {
 	return out
 }
 
+// ParseCode parses the code from the given io.Reader into a Source objects by
+// splitting on comment blocks.
 func ParseCode(r io.Reader) Source {
 	src := Source{}
 	block := CodeBlock{}
