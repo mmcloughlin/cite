@@ -5,7 +5,7 @@ import (
 	"net/url"
 )
 
-// Citation is a reference to an external resource, perhaps specifiying
+// Citation is a reference to an external resource, perhaps specifying
 // a particular segment of it with some extra data.
 type Citation struct {
 	URL   *url.URL

@@ -13,7 +13,7 @@ var (
 )
 
 // CommentBlock represents a Golang block comment with "//" syntax. All lines
-// of the comment have the same bytes preceeding the "//", which we call the
+// of the comment have the same bytes preeeding the "//", which we call the
 // leader.
 type CommentBlock struct {
 	Leader string
@@ -29,7 +29,7 @@ func (c CommentBlock) String() string {
 	return out
 }
 
-// CodeBlock represents arbitrary lines of Golang source code preceeded by a
+// CodeBlock represents arbitrary lines of Golang source code preceded by a
 // CommentBlock.
 type CodeBlock struct {
 	CommentBlock CommentBlock
