@@ -10,7 +10,12 @@ import (
 	"github.com/mvdan/xurls"
 )
 
+// ErrUnknownAction is returned when an action is encountered for which no
+// handlers are registered.
 var ErrUnknownAction = errors.New("cite: unknown action")
+
+// ErrUnknownResource is returned when the Processor is unable to map a
+// Citation to the Resource it references.
 var ErrUnknownResource = errors.New("cite: unknown resource type")
 
 var directiveRegex *regexp.Regexp
@@ -26,11 +31,15 @@ func init() {
 	}
 }
 
+// Directive represents a line in godoc to be processed by cite. This is an
+// action together with a citation.
 type Directive struct {
 	ActionRaw string
 	Citation  Citation
 }
 
+// ParseDirective tests the given line for a Directive and returns it if
+// found.
 func ParseDirective(line string) (*Directive, error) {
 	match := directiveRegex.FindStringSubmatch(line)
 	if match == nil {
@@ -55,10 +64,13 @@ func ParseDirective(line string) (*Directive, error) {
 	}, nil
 }
 
+// CanonicalAction returns the canonical casing of an action string. This
+// allows for arbitrary casing in the godoc.
 func CanonicalAction(s string) string {
 	return strings.ToLower(s)
 }
 
+// Action returns the canonical representation of the action in the directive.
 func (d Directive) Action() string {
 	return CanonicalAction(d.ActionRaw)
 }
@@ -67,13 +79,21 @@ func (d Directive) String() string {
 	return fmt.Sprintf("%s: %v", d.ActionRaw, d.Citation)
 }
 
+// Handler does something in response to a directive. It takes the referenced
+// Resource and all remaining lines in the comment block. It returns lines to
+// be inserted, lines remaining to be processed, and possibly an error.
 type Handler func(Resource, []string) ([]string, []string, error)
 
+// Processor modifies source code by performing some configured actions on
+// citations found in comment blocks.
 type Processor struct {
 	Handlers         map[string]Handler
 	ResourceBuilders []ResourceBuilder
 }
 
+// NewProcessor constructs a new Processor. It takes a list of
+// ResourceBuilder, which defines the types of references the Processor
+// understands.
 func NewProcessor(builders []ResourceBuilder) Processor {
 	return Processor{
 		Handlers:         make(map[string]Handler),
@@ -81,15 +101,18 @@ func NewProcessor(builders []ResourceBuilder) Processor {
 	}
 }
 
+// AddHandler registers a handler for the given action type. Note casing of
+// the action string does not matter.
 func (p Processor) AddHandler(action string, handler Handler) {
 	p.Handlers[CanonicalAction(action)] = handler
 }
 
+// Process transforms source code using registered handlers.
 func (p Processor) Process(src Source) (Source, error) {
 	blocks := make([]CodeBlock, len(src.Blocks))
 	for i, block := range src.Blocks {
 		var err error
-		blocks[i], err = p.ProcessCodeBlock(block)
+		blocks[i], err = p.processCodeBlock(block)
 		if err != nil {
 			return Source{}, err
 		}
@@ -99,8 +122,8 @@ func (p Processor) Process(src Source) (Source, error) {
 	}, nil
 }
 
-func (p Processor) ProcessCodeBlock(block CodeBlock) (CodeBlock, error) {
-	comment, err := p.ProcessCommentBlock(block.CommentBlock)
+func (p Processor) processCodeBlock(block CodeBlock) (CodeBlock, error) {
+	comment, err := p.processCommentBlock(block.CommentBlock)
 	if err != nil {
 		return CodeBlock{}, err
 	}
@@ -110,16 +133,16 @@ func (p Processor) ProcessCodeBlock(block CodeBlock) (CodeBlock, error) {
 	}, nil
 }
 
-func (p Processor) ProcessCommentBlock(comment CommentBlock) (CommentBlock, error) {
+func (p Processor) processCommentBlock(comment CommentBlock) (CommentBlock, error) {
 	var err error
-	comment.Lines, err = p.ProcessLines(comment.Lines)
+	comment.Lines, err = p.processLines(comment.Lines)
 	if err != nil {
 		return CommentBlock{}, err
 	}
 	return comment, nil
 }
 
-func (p Processor) ProcessLines(lines []string) ([]string, error) {
+func (p Processor) processLines(lines []string) ([]string, error) {
 	var output []string
 
 	for len(lines) > 0 {
