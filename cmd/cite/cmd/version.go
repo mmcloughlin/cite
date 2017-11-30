@@ -1,6 +1,3 @@
-// Copyright © 2016 Marketplace Analytics <admins@urchin.us>
-//
-
 package cmd
 
 import (
