@@ -23,7 +23,7 @@ var subexpIdx = map[string]int{}
 
 func init() {
 	urlRegexp, _ := xurls.StrictMatchingScheme("https?")
-	directiveExpr := `(?P<action>\w+):?\s+(?P<url>` + urlRegexp.String() + `)(\s+\((?P<extra>.+)\))?`
+	directiveExpr := `^\s*(?P<action>\w+):\s+(?P<url>` + urlRegexp.String() + `)(\s+\((?P<extra>.+)\))?`
 	directiveRegex = regexp.MustCompile(directiveExpr)
 
 	for i, name := range directiveRegex.SubexpNames() {

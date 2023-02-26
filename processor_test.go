@@ -12,6 +12,7 @@ func TestParseDirective(t *testing.T) {
 	line := "insert: https://www.rfc-editor.org/rfc/rfc918.txt (13-16)"
 	dir, err := ParseDirective(line)
 	require.NoError(t, err)
+	require.NotNil(t, dir)
 	assert.Equal(t, "insert", dir.ActionRaw)
 	assert.Equal(t, "https://www.rfc-editor.org/rfc/rfc918.txt", dir.Citation.URL.String())
 	assert.Equal(t, "13-16", dir.Citation.Extra)
@@ -21,6 +22,7 @@ func TestParseDirectiveNoExtra(t *testing.T) {
 	line := "Action: http://google.org"
 	dir, err := ParseDirective(line)
 	require.NoError(t, err)
+	require.NotNil(t, dir)
 	assert.Equal(t, "Action", dir.ActionRaw)
 	assert.Equal(t, "http://google.org", dir.Citation.URL.String())
 	assert.Equal(t, "", dir.Citation.Extra)
