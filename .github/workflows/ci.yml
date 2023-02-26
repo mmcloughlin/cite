@@ -26,6 +26,6 @@ jobs:
       - name: Test
         run: go test -v -coverprofile=coverage.out ./...
       - name: Upload Coverage
-        uses: shogo82148/actions-goveralls@v1
+        uses: shogo82148/actions-goveralls@31ee804b8576ae49f6dc3caa22591bc5080e7920 # v1.6.0
         with:
           path-to-profile: coverage.out
