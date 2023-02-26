@@ -1,6 +1,6 @@
 module github.com/mmcloughlin/cite
 
-go 1.20
+go 1.16
 
 require (
 	github.com/jarcoal/httpmock v0.0.0-20150801143502-145b10d65926
